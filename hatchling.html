@@ -1,0 +1,86 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="bbcode.js"></script>
+  <script type="text/javascript" src="colors.js"></script>
+  <script type="text/javascript" src="genes.js"></script>
+  <script>
+  $(document).ready(function() {
+    var color1 = "Moon";
+    var stuff = colors.val("Moon");
+    $("#output").text(stuff);
+
+    for(i=0; i<colors.length(); i++) {
+      curr = colors.keys()[i];
+      $(".color-select").append($("<option />").val(curr).html(curr));
+    }
+
+    for(b in breedDict) {
+      $(".breed-select").append($("<option />").val(b).html(b));
+    }
+
+    for(g in primaryDict) {
+      $(".primary-select").append($("<option />").val(g).html(g));
+    }
+    for(g in secondaryDict) {
+      $(".secondary-select").append($("<option />").val(g).html(g));
+    }
+
+    for(g in tertiaryDict) {
+      $(".tertiary-select").append($("<option />").val(g).html(g));
+    }
+
+    $("#generate").click(function() {
+      var stats = "";
+      stats += "#" + $("#number").val() + "\n";
+      stats += $("#breed").val() + " " + $("#gender").val() + "\n";
+      stats += $("#pcolor").val()+"/"+$("#scolor").val()+"/"+$("#tcolor").val()+"\n";
+      stats += $("#pgene").val()+"/"+$("#sgene").val()+"/"+$("#tgene").val()+"\n";
+      stats += $("#price").val()+"kt\n";
+      if($("#notes").val()) {
+        stats += $("#notes").val()
+      }
+
+      var arr = [$("#imgLink").val(), stats];
+      console.log(arr);
+      $("#output").text(bbColumns(arr));
+    });
+
+  });
+
+  </script>
+</head>
+
+<body>
+  <div>
+    Image: <textarea id="imgLink"></textarea>
+  </div>
+  <div>
+    Number:<input id="number"></input>
+    <select id="breed" class="breed-select"></select>
+    <select id="gender">
+      <option value="Female">Female</option>
+      <option value="Male">Male</option>
+    </select>
+  </div>
+  <div id="primary">
+    <label for="pcolor">Primary</label><select id="pcolor" class="color-select"></select><select id="pgene" class="primary-select"></select>
+  </div>
+  <div id="secondary">
+    <label for="scolor">Secondary</label><select id="scolor" class="color-select"></select><select id="sgene" class="secondary-select"></select>
+  </div>
+  <div id="tertiary">
+    <label for="tcolor">Tertiary</label><select id="tcolor" class="color-select"></select><select id="tgene" class="tertiary-select"></select>
+  </div>
+  <div>
+    Notes: <input id="notes"/>
+  </div>
+  <div>
+    Price: <input id="price"/>
+  </div>
+  <div>
+    <button id="generate">Generate</button>
+  </div>
+  <textarea id="output" rows="10" cols="50"></textarea>
+</body>
+</html>

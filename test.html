@@ -1,0 +1,52 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="colors.js"></script>
+  <script type="text/javascript" src="genes.js"></script>
+  <script>
+  $(document).ready(function() {
+    var color1 = "Moon";
+    var stuff = colors.val("Moon");
+    $("#output").text(stuff);
+
+    for(i=0; i<colors.length(); i++) {
+      curr = colors.keys()[i];
+      $(".color-select").append($("<option />").val(curr).html(curr));
+    }
+
+    for(b in breedDict) {
+      $(".breed-select").append($("<option />").val(b).html(b));
+    }
+
+    for(g in primaryDict) {
+      $(".primary-select").append($("<option />").val(g).html(g));
+    }
+
+    $("#generate").click(function() {
+      var r = getColorRange($("#pcolor1").val(), $("#pcolor2").val());
+      $("#output").text(r);
+
+      var s = compareRarity($("#breed1").val(), $("#breed2").val());
+      $("#breedout").text(s);
+    });
+
+  });
+
+  </script>
+</head>
+
+<body>
+  <div id="output">words</div>
+  <div id="breedout"></div>
+  <div>
+    <select id="breed1" class="breed-select"></select><select id="breed2" class="breed-select"></select>
+  </div>
+  <div>
+    <label for="pcolor1">Primary 1</label><select id="pcolor1" class="color-select"></select><select id="pgene1" class="primary-select"></select>
+    <label for="pcolor2">Primary 2</label><select id="pcolor2" class="color-select"></select><select id="pgene2" class="primary-select"></select>
+  </div>
+  <div>
+    <button id="generate">Generate</button>
+  </div>
+</body>
+</html>
