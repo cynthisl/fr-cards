@@ -81,3 +81,14 @@ function compareRarity(gene1, gene2) {
 
   return [odds1, odds2];
 }
+
+// giventwo types and a rarity pair, generate the string that compares them
+function rarityStr(r1, r2) {
+  var arr = compareRarity(r1, r2);
+  if(arr[0] == 1) {
+    // same breed
+    return("100% " + r1);
+  } else {
+    return(Math.floor(arr[0]*100) + "% " + r1 + " | " + Math.floor(arr[1]*100) + "% " +  r2);
+  }   
+}

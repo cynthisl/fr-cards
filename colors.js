@@ -62,6 +62,11 @@ function getHexesFromRange(range) {
   return res;
 }
 
+function getColorHexRange(c1, c2) {
+  var r = getColorRange(c1, c2);
+  return getHexesFromRange(r);
+}
+
 
 
 function addColors(colors) {

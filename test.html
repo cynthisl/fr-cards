@@ -1,8 +1,11 @@
 <html>
 <head>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> 
   <script type="text/javascript" src="colors.js"></script>
   <script type="text/javascript" src="genes.js"></script>
+  <script type="text/javascript" src="bbcode.js"></script>
   <script>
   $(document).ready(function() {
     var color1 = "Moon";
@@ -21,32 +24,92 @@
     for(g in primaryDict) {
       $(".primary-select").append($("<option />").val(g).html(g));
     }
+    for(g in secondaryDict) {
+      $(".secondary-select").append($("<option />").val(g).html(g));
+    }
+    for(g in tertiaryDict) {
+      $(".tertiary-select").append($("<option />").val(g).html(g));
+    }
 
     $("#generate").click(function() {
-      var r = getColorRange($("#pcolor1").val(), $("#pcolor2").val());
-      $("#output").text(r);
+      var title = ($('.d1.name').val() + " x " + $('.d2.name').val()).bbBold().bbUnderline().bbSetSize(6).bbCenter();
+      var subtitle = $('#md-notes').val().bbSetSize(4).bbItalic().bbCenter();
+      var subsubtitle = $('#sm-notes').val().bbSetSize(2).bbCenter();
+      var d1Img = bbLinkToSmall($('.d1.img').val());
+      var d2Img = bbLinkToSmall($('.d2.img').val());
 
-      var s = compareRarity($("#breed1").val(), $("#breed2").val());
-      $("#breedout").text(s);
+      var breedStr = rarityStr($("#breed1").val(), $("#breed2").val());
+
+      var priGeneStr = rarityStr($('.d1.primary-select').val(), $('.d2.primary-select').val());
+
+      var secGeneStr = rarityStr($('.d1.secondary-select').val(), $('.d2.secondary-select').val());
+
+      var tertGeneStr = rarityStr($('.d1.tertiary-select').val(), $('.d2.tertiary-select').val());
+
+      var priColorStr = bbColorBlock(getColorHexRange($('.d1.pri.color-select').val(), $('.d2.pri.color-select').val()));
+      var secColorStr = bbColorBlock(getColorHexRange($('.d1.sec.color-select').val(), $('.d2.sec.color-select').val()));
+      var tertColorStr = bbColorBlock(getColorHexRange($('.d1.tert.color-select').val(), $('.d2.tert.color-select').val()));
+
+      var titles = bbBreaks([title, subtitle, subsubtitle]);
+
+      var centerCol = bbBreaks([breedStr, priColorStr, priGeneStr, secColorStr, secGeneStr, tertColorStr, tertGeneStr]);
+
+      var out = titles + BREAK + bbColumns([d1Img, centerCol, d2Img]);
+
+      $("#output").text(out);
+
+
     });
 
+
+
   });
+
 
   </script>
 </head>
 
 <body>
-  <div id="output">words</div>
+  <div class="container-fluid">
   <div id="breedout"></div>
-  <div>
-    <select id="breed1" class="breed-select"></select><select id="breed2" class="breed-select"></select>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">Name: <input class="d1 name"/></div>
+    <div class="col-md-4">Name: <input class="d2 name"/></div>
   </div>
-  <div>
-    <label for="pcolor1">Primary 1</label><select id="pcolor1" class="color-select"></select><select id="pgene1" class="primary-select"></select>
-    <label for="pcolor2">Primary 2</label><select id="pcolor2" class="color-select"></select><select id="pgene2" class="primary-select"></select>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">Image: <textarea class="d1 img"></textarea></div>
+    <div class="col-md-4">Image: <textarea class="d2 img"></textarea></div>
   </div>
-  <div>
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">Breed: <select id="breed1" class="d1 breed-select"></select></div>
+    <div class="col-md-4">Breed: <select id="breed2" class="d2 breed-select"></select></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">Primary: <select id="pcolor1" class="d1 color-select pri"></select><select id="pgene1" class="d1 primary-select"></select></div>
+    <div class="col-md-4">Primary: <select id="pcolor2" class="d2 color-select pri"></select><select id="pgene2" class="d2 primary-select"></select></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">Secondary: <select id="scolor1" class="d1 color-select sec"></select><select id="sgene1" class="d1 secondary-select"></select></div>
+    <div class="col-md-4">Secondary: <select id="scolor2" class="d2 color-select sec"></select><select id="sgene2" class="d2 secondary-select"></select></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">Tertiary: <select id="tcolor1" class="d1 color-select tert"></select><select id="tgene1" class="d1 tertiary-select"></select></div>
+    <div class="col-md-4">Tertiary: <select id="tcolor2" class="d2 color-select tert"></select><select id="tgene2" class="d2 tertiary-select"></select></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-3">Medium Notes: <input id="md-notes"/></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-3">Small Notes: <input id="sm-notes"/></div>
+  </div>
+  <div class="row">
     <button id="generate">Generate</button>
+  </div>
+
+  <div>
+    <textarea id="output" rows="25" cols="100"></textarea>
+  </div>
   </div>
 </body>
 </html>
