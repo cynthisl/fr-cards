@@ -32,11 +32,11 @@
 
     $("#generate").click(function() {
       var stats = "";
-      stats += "#" + $("#number").val() + "\n";
-      stats += $("#breed").val() + " " + $("#gender").val() + "\n";
+      stats += "#" + $("#number").val() + RULE;
+      stats += $("#breed").val() + " " + $("#gender").val() + RULE;
       stats += $("#pcolor").val()+"/"+$("#scolor").val()+"/"+$("#tcolor").val()+"\n";
-      stats += $("#pgene").val()+"/"+$("#sgene").val()+"/"+$("#tgene").val()+"\n";
-      stats += $("#price").val()+"kt\n";
+      stats += $("#pgene").val()+"/"+$("#sgene").val()+"/"+$("#tgene").val()+RULE;
+      stats += $("#price").val()+RULE;
       if($("#notes").val()) {
         stats += $("#notes").val()
       }

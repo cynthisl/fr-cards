@@ -31,10 +31,19 @@
       $(".tertiary-select").append($("<option />").val(g).html(g));
     }
 
+    $('input,select,textarea').each(function() {
+      if($(this).hasClass('d1')) {
+        $(this).attr("tabindex", 1);
+      }
+      else if($(this).hasClass('d2')) {
+        $(this).attr("tabindex", 2);
+      }
+    })
+
     $("#generate").click(function() {
       var title = ($('.d1.name').val() + " x " + $('.d2.name').val()).bbBold().bbUnderline().bbSetSize(6).bbCenter();
-      var subtitle = $('#md-notes').val().bbSetSize(4).bbItalic().bbCenter();
-      var subsubtitle = $('#sm-notes').val().bbSetSize(2).bbCenter();
+      var subtitle = ($('#md-notes').val()) ? $('#md-notes').val().bbSetSize(4).bbItalic().bbCenter() : "";
+      var subsubtitle = ($('#sm-notes').val()) ? $('#sm-notes').val().bbSetSize(2).bbCenter() : "";
       var d1Img = bbLinkToSmall($('.d1.img').val());
       var d2Img = bbLinkToSmall($('.d2.img').val());
 
@@ -50,11 +59,10 @@
       var secColorStr = bbColorBlock(getColorHexRange($('.d1.sec.color-select').val(), $('.d2.sec.color-select').val()));
       var tertColorStr = bbColorBlock(getColorHexRange($('.d1.tert.color-select').val(), $('.d2.tert.color-select').val()));
 
-      var titles = bbBreaks([title, subtitle, subsubtitle]);
+      var titles = title+subtitle+subsubtitle;
+      var centerCol = bbBreaks([breedStr, priColorStr, priGeneStr, secColorStr, secGeneStr, tertColorStr, tertGeneStr]).bbCenter();
 
-      var centerCol = bbBreaks([breedStr, priColorStr, priGeneStr, secColorStr, secGeneStr, tertColorStr, tertGeneStr]);
-
-      var out = titles + BREAK + bbColumns([d1Img, centerCol, d2Img]);
+      var out = titles + bbColumns([d1Img, centerCol, d2Img]).bbIndent().bbIndent()+RULE;
 
       $("#output").text(out);
 

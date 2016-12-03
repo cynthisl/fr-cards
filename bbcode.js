@@ -18,6 +18,9 @@ String.prototype.bbItalic = function() {
 String.prototype.bbCenter = function() {
   return("[center]" + this + "[/center]");
 }
+String.prototype.bbIndent = function() {
+  return("[indent]" + this + "[/indent]");
+}
 
 String.prototype.bbAddRule = function() {
   return(this+"[rule]");
@@ -38,8 +41,10 @@ function bbColumns(arr) {
 function bbBreaks(arr) {
   var str = "";
   for(i=0; i<arr.length; i++) {
-    str += arr[i];
-    str += BREAK;
+    if(arr[i] != "") {
+      str += arr[i];
+      str += BREAK;
+    }
   }
   return str;
 }
@@ -60,10 +65,16 @@ String.prototype.bbImg = function() {
 
 function bbColorBlock(colors) {
   var str = "";
+  var rowsize = colors.length
+  if(colors.length > 44) {
+    // divide in 2 if too long
+    rowsize = colors.length/2;
+  }
   for(i=0; i<colors.length; i++) {
+    if(i==Math.ceil(rowsize)) str+=BREAK;
     str += COLORBLOCK_CHAR.bbAddColor(colors[i]);
   }
-  str = str.bbAddFont(COLORBLOCK_FONT).bbSetSize(COLORBLOCK_SIZE);
+  str = str.bbAddFont(COLORBLOCK_FONT).bbSetSize(COLORBLOCK_SIZE).bbBold();
   return str;
 }
 
